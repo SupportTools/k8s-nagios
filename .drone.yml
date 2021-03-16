@@ -4,7 +4,6 @@ type: kubernetes
 name: BuildDocker-ARM
 
 platform:
-  os: linux
   arch: arm64
 
 steps:

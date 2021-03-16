@@ -3,9 +3,6 @@ kind: pipeline
 type: kubernetes
 name: BuildDocker-ARM
 
-platform:
-  arch: arm64
-
 steps:
   - name: dellpowerconnect
     image: plugins/docker
@@ -22,3 +19,6 @@ steps:
         from_secret: registry-username
       password:
         from_secret: registry-password
+
+node:
+  cluster: a1-k3s-prd

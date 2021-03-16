@@ -4,7 +4,7 @@ type: kubernetes
 name: BuildDocker-ARM
 
 steps:
-  - name: dellpowerconnect
+  - name: nagiosserver
     image: plugins/docker
     settings:
       repo: registry-private.support.tools/k8s-nagios/server
@@ -44,7 +44,7 @@ type: kubernetes
 name: BuildDocker-AMD
 
 steps:
-  - name: dellpowerconnect
+  - name: nagiosserver
     image: plugins/docker
     settings:
       repo: registry-private.support.tools/k8s-nagios/server

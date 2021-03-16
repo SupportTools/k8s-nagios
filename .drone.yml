@@ -3,9 +3,30 @@ kind: pipeline
 type: kubernetes
 name: BuildDocker-ARM
 
-platform:
-  os: linux
-  arch: amd64
+steps:
+  - name: dellpowerconnect
+    image: plugins/docker
+    settings:
+      repo: registry-private.support.tools/k8s-nagios/workers/dellpowerconnect
+      registry: registry-private.support.tools
+      dockerfile: workers/dellpowerconnect/Dockerfile
+      context: workers/dellpowerconnect/
+      tags:
+        - ${DRONE_BUILD_NUMBER}
+        - ${DRONE_COMMIT_BRANCH}
+        - latest
+      username:
+        from_secret: registry-username
+      password:
+        from_secret: registry-password
+
+node_selector:
+  beta.kubernetes.io/arch: arm64
+
+---
+kind: pipeline
+type: kubernetes
+name: BuildDocker-AMD
 
 steps:
   - name: dellpowerconnect
@@ -25,4 +46,4 @@ steps:
         from_secret: registry-password
 
 node_selector:
-  hardware: raspberrypi4
+  beta.kubernetes.io/arch: amd64

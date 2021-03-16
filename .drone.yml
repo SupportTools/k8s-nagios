@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: kubernetes
-name: BuildDocker-ARM
+name: Build-arm64
 
 steps:
   - name: nagiosserver
@@ -26,6 +26,21 @@ steps:
       registry: registry-private.support.tools
       dockerfile: workers/dellpowerconnect/Dockerfile
       context: workers/dellpowerconnect/
+      tags:
+        - ${DRONE_BUILD_NUMBER}
+        - ${DRONE_COMMIT_BRANCH}
+        - latest
+      username:
+        from_secret: registry-username
+      password:
+        from_secret: registry-password
+  - name: linuxserver
+    image: plugins/docker
+    settings:
+      repo: registry-private.support.tools/k8s-nagios/workers/linuxserver
+      registry: registry-private.support.tools
+      dockerfile: workers/linuxserver/Dockerfile
+      context: workers/linuxserver/
       tags:
         - ${DRONE_BUILD_NUMBER}
         - ${DRONE_COMMIT_BRANCH}
@@ -41,7 +56,7 @@ node_selector:
 ---
 kind: pipeline
 type: kubernetes
-name: BuildDocker-AMD
+name: Build-amd64
 
 steps:
   - name: nagiosserver
@@ -74,6 +89,21 @@ steps:
         from_secret: registry-username
       password:
         from_secret: registry-password
+  - name: linuxserver
+    image: plugins/docker
+    settings:
+      repo: registry-private.support.tools/k8s-nagios/workers/linuxserver
+      registry: registry-private.support.tools
+      dockerfile: workers/linuxserver/Dockerfile
+      context: workers/linuxserver/
+      tags:
+        - ${DRONE_BUILD_NUMBER}
+        - ${DRONE_COMMIT_BRANCH}
+        - latest
+      username:
+        from_secret: registry-username
+      password:
+        from_secret: registry-password        
 
 node_selector:
   beta.kubernetes.io/arch: amd64

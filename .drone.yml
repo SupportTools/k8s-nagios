@@ -7,6 +7,21 @@ steps:
   - name: dellpowerconnect
     image: plugins/docker
     settings:
+      repo: registry-private.support.tools/k8s-nagios/server
+      registry: registry-private.support.tools
+      dockerfile: server/Dockerfile
+      context: server/
+      tags:
+        - ${DRONE_BUILD_NUMBER}
+        - ${DRONE_COMMIT_BRANCH}
+        - latest
+      username:
+        from_secret: registry-username
+      password:
+        from_secret: registry-password
+  - name: dellpowerconnect
+    image: plugins/docker
+    settings:
       repo: registry-private.support.tools/k8s-nagios/workers/dellpowerconnect
       registry: registry-private.support.tools
       dockerfile: workers/dellpowerconnect/Dockerfile
@@ -29,6 +44,21 @@ type: kubernetes
 name: BuildDocker-AMD
 
 steps:
+  - name: dellpowerconnect
+    image: plugins/docker
+    settings:
+      repo: registry-private.support.tools/k8s-nagios/server
+      registry: registry-private.support.tools
+      dockerfile: server/Dockerfile
+      context: server/
+      tags:
+        - ${DRONE_BUILD_NUMBER}
+        - ${DRONE_COMMIT_BRANCH}
+        - latest
+      username:
+        from_secret: registry-username
+      password:
+        from_secret: registry-password
   - name: dellpowerconnect
     image: plugins/docker
     settings:

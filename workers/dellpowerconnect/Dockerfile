@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     apt-utils \
     curl \
     bash \
+    perl \
     openssl \
     iputils-ping \
     libnet-snmp-perl \

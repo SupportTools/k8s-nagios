@@ -19,9 +19,9 @@ steps:
         - ${DRONE_COMMIT_BRANCH}
         - latest
       username:
-        from_secret: docker-username
+        from_secret: registry-username
       password:
-        from_secret: docker-password
+        from_secret: registry-password
 
 ---
 kind: pipeline
@@ -44,6 +44,6 @@ steps:
         - ${DRONE_COMMIT_BRANCH}
         - latest
       username:
-        from_secret: docker-username
+        from_secret: registry-username
       password:
-        from_secret: docker-password
+        from_secret: registry-password

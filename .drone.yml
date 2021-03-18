@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: kubernetes
-name: Build-arm64
+name: Build-nagiosserver-arm64
 
 steps:
   - name: nagiosserver
@@ -22,6 +22,16 @@ steps:
         from_secret: registry-username
       password:
         from_secret: registry-password
+
+node_selector:
+  beta.kubernetes.io/arch: arm64
+
+---
+kind: pipeline
+type: kubernetes
+name: Build-dellpowerconnect-arm64
+
+steps:
   - name: dellpowerconnect
     image: plugins/docker
     settings:
@@ -40,6 +50,16 @@ steps:
         from_secret: registry-username
       password:
         from_secret: registry-password
+
+node_selector:
+  beta.kubernetes.io/arch: arm64
+
+---
+kind: pipeline
+type: kubernetes
+name: Build-linuxserver-arm64
+
+steps:
   - name: linuxserver
     image: plugins/docker
     settings:

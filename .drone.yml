@@ -9,6 +9,9 @@ steps:
     settings:
       repo: registry-private.support.tools/k8s-nagios/server
       registry: registry-private.support.tools
+      custom_dns:
+        - 1.1.1.1
+        - 1.0.0.1
       dockerfile: server/Dockerfile
       context: server/
       tags:
@@ -24,6 +27,9 @@ steps:
     settings:
       repo: registry-private.support.tools/k8s-nagios/workers/dellpowerconnect
       registry: registry-private.support.tools
+      custom_dns:
+        - 1.1.1.1
+        - 1.0.0.1
       dockerfile: workers/dellpowerconnect/Dockerfile
       context: workers/dellpowerconnect/
       tags:
@@ -39,6 +45,9 @@ steps:
     settings:
       repo: registry-private.support.tools/k8s-nagios/workers/linuxserver
       registry: registry-private.support.tools
+      custom_dns:
+        - 1.1.1.1
+        - 1.0.0.1
       dockerfile: workers/linuxserver/Dockerfile
       context: workers/linuxserver/
       tags:
@@ -64,6 +73,9 @@ steps:
     settings:
       repo: registry-private.support.tools/k8s-nagios/server
       registry: registry-private.support.tools
+      custom_dns:
+        - 1.1.1.1
+        - 1.0.0.1
       dockerfile: server/Dockerfile
       context: server/
       tags:
@@ -79,6 +91,9 @@ steps:
     settings:
       repo: registry-private.support.tools/k8s-nagios/workers/dellpowerconnect
       registry: registry-private.support.tools
+      custom_dns:
+        - 1.1.1.1
+        - 1.0.0.1
       dockerfile: workers/dellpowerconnect/Dockerfile
       context: workers/dellpowerconnect/
       tags:
@@ -94,6 +109,9 @@ steps:
     settings:
       repo: registry-private.support.tools/k8s-nagios/workers/linuxserver
       registry: registry-private.support.tools
+      custom_dns:
+        - 1.1.1.1
+        - 1.0.0.1
       dockerfile: workers/linuxserver/Dockerfile
       context: workers/linuxserver/
       tags:
@@ -103,7 +121,7 @@ steps:
       username:
         from_secret: registry-username
       password:
-        from_secret: registry-password        
+        from_secret: registry-password
 
 node_selector:
   beta.kubernetes.io/arch: amd64

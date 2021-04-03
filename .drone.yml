@@ -68,7 +68,7 @@ steps:
       kubernetes_token:
         from_secret: a1-k3s-prd_token
     commands:
-      - kubectl create ns nagios-${DRONE_BUILD_NUMBER}
+      - kubectl create ns nagios-${DRONE_BUILD_NUMBER} --v=7
       - kubectl label ns nagios-${DRONE_BUILD_NUMBER} team=supporttools
       - kubectl label ns nagios-${DRONE_BUILD_NUMBER} app=nagios
       - kubectl label ns nagios-${DRONE_BUILD_NUMBER} ns-purge=true

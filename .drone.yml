@@ -9,9 +9,6 @@ steps:
     settings:
       repo: registry.support.tools/k8s-nagios/server
       registry: registry.support.tools
-      custom_dns:
-        - 1.1.1.1
-        - 1.0.0.1
       dockerfile: server/Dockerfile
       context: server/
       tags:
@@ -28,9 +25,6 @@ steps:
     settings:
       repo: registry.support.tools/k8s-nagios/workers/dellpowerconnect
       registry: registry.support.tools
-      custom_dns:
-        - 1.1.1.1
-        - 1.0.0.1
       dockerfile: workers/dellpowerconnect/Dockerfile
       context: workers/dellpowerconnect/
       tags:
@@ -47,9 +41,6 @@ steps:
     settings:
       repo: registry.support.tools/k8s-nagios/workers/linuxserver
       registry: registry.support.tools
-      custom_dns:
-        - 1.1.1.1
-        - 1.0.0.1
       dockerfile: workers/linuxserver/Dockerfile
       context: workers/linuxserver/
       tags:
@@ -69,13 +60,28 @@ steps:
     commands:
       - bash ./deploy.sh
 
-  - name: deploy-nonprod
+  - name: deploy-npd
     image: cube8021/drone-kubectl
     settings:
       kubernetes_server:
-        from_secret: k8s_server
+        from_secret: a1-k3s-prd_server
       kubernetes_token:
-        from_secret: k8s_token
+        from_secret: a1-k3s-prd_token
+    commands:
+      - kubectl create ns nagios-${DRONE_BUILD_NUMBER}
+      - kubectl label ns nagios-${DRONE_BUILD_NUMBER} team=supporttools
+      - kubectl label ns nagios-${DRONE_BUILD_NUMBER} app=nagios
+      - kubectl label ns nagios-${DRONE_BUILD_NUMBER} ns-purge=true
+      - kubectl annotate ns nagios-${DRONE_BUILD_NUMBER} field.cattle.io/projectId=c-nshm8:p-j4xxn
+      - kubectl apply -n nagios-${DRONE_BUILD_NUMBER} -f ./deployment-ready/
+
+  - name: deploy-prd
+    image: cube8021/drone-kubectl
+    settings:
+      kubernetes_server:
+        from_secret: b1-k3s-prd_server
+      kubernetes_token:
+        from_secret: b1-k3s-prd_token
     commands:
       - kubectl create ns nagios-${DRONE_BUILD_NUMBER}
       - kubectl label ns nagios-${DRONE_BUILD_NUMBER} team=supporttools

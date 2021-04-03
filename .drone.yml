@@ -52,6 +52,12 @@ steps:
       password:
         from_secret: registry-password
 
+---
+kind: pipeline
+type: kubernetes
+name: Deploy
+
+steps:
   - name: customize-kube-files
     image: supporttools/kube-builder
     pull: true

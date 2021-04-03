@@ -60,7 +60,10 @@ RUN a2enconf servername
 RUN ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
     ln -sf /proc/self/fd/1 /var/log/apache2/error.log
 
-RUN curl -sfL https://github.com/mattmattox/kube-leader/archive/refs/tags/v0.1.4.tar.gz | tar -zx && chmod +x kube-leader
+RUN wget --no-check-certificate https://github.com/grosser/kube-leader/releases/download/v0.1.4/kube-leader-v0.1.4-linux-amd64.tar.gz && \
+tar -zvxf kube-leader-v0.1.4-linux-amd64.tar.gz && \
+chmod +x kube-leader && \
+mv kube-leader /usr/local/bin/kube-leader
 ENTRYPOINT ["./kube-leader", "my-lock"]
 
 COPY run.sh /bin/run.sh

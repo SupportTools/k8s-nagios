@@ -2,11 +2,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: osticket
+  name: nagiosserver
 spec:
   selector:
     matchLabels:
-      app: osticket
+      app: nagiosserver
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       labels:
-        app: osticket
+        app: nagiosserver
     spec:
       imagePullSecrets:
       - name: regcred
@@ -23,9 +23,9 @@ spec:
       - env:
         - name: site
           value: support
-        image: registry.support.tools/mattox-engineering/support/osticket:BUILD_NUMBER
+        image: registry.support.tools/nagios/server:BUILD_NUMBER
         imagePullPolicy: IfNotPresent
-        name: osticket
+        name: nagiosserver
         livenessProbe:
           failureThreshold: 3
           httpGet:

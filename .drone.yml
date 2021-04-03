@@ -1,14 +1,14 @@
 ---
 kind: pipeline
 type: kubernetes
-name: Build-nagiosserver-arm64
+name: Build
 
 steps:
   - name: nagiosserver
     image: plugins/docker
     settings:
-      repo: registry-private.support.tools/k8s-nagios/server
-      registry: registry-private.support.tools
+      repo: registry.support.tools/k8s-nagios/server
+      registry: registry.support.tools
       custom_dns:
         - 1.1.1.1
         - 1.0.0.1
@@ -23,20 +23,11 @@ steps:
       password:
         from_secret: registry-password
 
-node_selector:
-  beta.kubernetes.io/arch: arm64
-
----
-kind: pipeline
-type: kubernetes
-name: Build-dellpowerconnect-arm64
-
-steps:
   - name: dellpowerconnect
     image: plugins/docker
     settings:
-      repo: registry-private.support.tools/k8s-nagios/workers/dellpowerconnect
-      registry: registry-private.support.tools
+      repo: registry.support.tools/k8s-nagios/workers/dellpowerconnect
+      registry: registry.support.tools
       custom_dns:
         - 1.1.1.1
         - 1.0.0.1
@@ -51,20 +42,11 @@ steps:
       password:
         from_secret: registry-password
 
-node_selector:
-  beta.kubernetes.io/arch: arm64
-
----
-kind: pipeline
-type: kubernetes
-name: Build-linuxserver-arm64
-
-steps:
   - name: linuxserver
     image: plugins/docker
     settings:
-      repo: registry-private.support.tools/k8s-nagios/workers/linuxserver
-      registry: registry-private.support.tools
+      repo: registry.support.tools/k8s-nagios/workers/linuxserver
+      registry: registry.support.tools
       custom_dns:
         - 1.1.1.1
         - 1.0.0.1
@@ -78,90 +60,3 @@ steps:
         from_secret: registry-username
       password:
         from_secret: registry-password
-
-node_selector:
-  beta.kubernetes.io/arch: arm64
-
----
-kind: pipeline
-type: kubernetes
-name: Build-nagiosserver-amd64
-
-steps:
-  - name: nagiosserver
-    image: plugins/docker
-    settings:
-      repo: registry-private.support.tools/k8s-nagios/server
-      registry: registry-private.support.tools
-      custom_dns:
-        - 1.1.1.1
-        - 1.0.0.1
-      dockerfile: server/Dockerfile
-      context: server/
-      tags:
-        - ${DRONE_BUILD_NUMBER}
-        - ${DRONE_COMMIT_BRANCH}
-        - latest
-      username:
-        from_secret: registry-username
-      password:
-        from_secret: registry-password
-
-node_selector:
-  beta.kubernetes.io/arch: amd64
-
----
-kind: pipeline
-type: kubernetes
-name: Build-dellpowerconnect-amd64
-
-steps:
-  - name: dellpowerconnect
-    image: plugins/docker
-    settings:
-      repo: registry-private.support.tools/k8s-nagios/workers/dellpowerconnect
-      registry: registry-private.support.tools
-      custom_dns:
-        - 1.1.1.1
-        - 1.0.0.1
-      dockerfile: workers/dellpowerconnect/Dockerfile
-      context: workers/dellpowerconnect/
-      tags:
-        - ${DRONE_BUILD_NUMBER}
-        - ${DRONE_COMMIT_BRANCH}
-        - latest
-      username:
-        from_secret: registry-username
-      password:
-        from_secret: registry-password
-
-node_selector:
-  beta.kubernetes.io/arch: amd64
-
----
-kind: pipeline
-type: kubernetes
-name: Build-linuxserver-amd64
-
-steps:
-  - name: linuxserver
-    image: plugins/docker
-    settings:
-      repo: registry-private.support.tools/k8s-nagios/workers/linuxserver
-      registry: registry-private.support.tools
-      custom_dns:
-        - 1.1.1.1
-        - 1.0.0.1
-      dockerfile: workers/linuxserver/Dockerfile
-      context: workers/linuxserver/
-      tags:
-        - ${DRONE_BUILD_NUMBER}
-        - ${DRONE_COMMIT_BRANCH}
-        - latest
-      username:
-        from_secret: registry-username
-      password:
-        from_secret: registry-password
-
-node_selector:
-  beta.kubernetes.io/arch: amd64

@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: nagiosserver
+  name: nagios-lb
+spec:
+  rules:
+  - host: nagios-BUILD_NUMBER.support.tools
+    http:
+      paths:
+      - backend:
+          serviceName: nagiosserver
+          servicePort: 80
+        pathType: ImplementationSpecific

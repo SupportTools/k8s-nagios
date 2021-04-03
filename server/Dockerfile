@@ -60,5 +60,8 @@ RUN a2enconf servername
 RUN ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
     ln -sf /proc/self/fd/1 /var/log/apache2/error.log
 
+RUN curl -sfL https://github.com/mattmattox/kube-leader/archive/refs/tags/v0.1.4.tar.gz | tar -zx && chmod +x kube-leader
+ENTRYPOINT ["./kube-leader", "my-lock"]
+
 COPY run.sh /bin/run.sh
 CMD /bin/run.sh

@@ -91,7 +91,7 @@ steps:
       - kubectl label ns nagios-${DRONE_BUILD_NUMBER} app=nagios
       - kubectl label ns nagios-${DRONE_BUILD_NUMBER} ns-purge=true
       - kubectl annotate ns nagios-${DRONE_BUILD_NUMBER} field.cattle.io/projectId=c-nshm8:p-j4xxn
-      - kubectl apply -n nagios-${DRONE_BUILD_NUMBER} --v=5 -f ./deployment-ready/
+      - kubectl apply -n nagios-${DRONE_BUILD_NUMBER} -f ./deployment-ready/
 
   - name: deploy-prd
     image: cube8021/drone-kubectl

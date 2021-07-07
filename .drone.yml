@@ -1,0 +1,114 @@
+---
+kind: pipeline
+type: kubernetes
+name: Build-nagiosserver
+
+steps:
+  - name: nagiosserver
+    image: plugins/docker
+    settings:
+      repo: registry.support.tools/k8s-nagios/server
+      registry: registry.support.tools
+      dockerfile: server/Dockerfile
+      context: server/
+      tags:
+        - ${DRONE_BUILD_NUMBER}
+        - ${DRONE_COMMIT_BRANCH}
+        - latest
+      username:
+        from_secret: registry-username
+      password:
+        from_secret: registry-password
+
+---
+kind: pipeline
+type: kubernetes
+name: Build-dellpowerconnect
+
+steps:
+  - name: dellpowerconnect
+    image: plugins/docker
+    settings:
+      repo: registry.support.tools/k8s-nagios/workers/dellpowerconnect
+      registry: registry.support.tools
+      dockerfile: workers/dellpowerconnect/Dockerfile
+      context: workers/dellpowerconnect/
+      tags:
+        - ${DRONE_BUILD_NUMBER}
+        - ${DRONE_COMMIT_BRANCH}
+        - latest
+      username:
+        from_secret: registry-username
+      password:
+        from_secret: registry-password
+
+---
+kind: pipeline
+type: kubernetes
+name: Build-linuxserver
+
+steps:
+  - name: linuxserver
+    image: plugins/docker
+    settings:
+      repo: registry.support.tools/k8s-nagios/workers/linuxserver
+      registry: registry.support.tools
+      dockerfile: workers/linuxserver/Dockerfile
+      context: workers/linuxserver/
+      tags:
+        - ${DRONE_BUILD_NUMBER}
+        - ${DRONE_COMMIT_BRANCH}
+        - latest
+      username:
+        from_secret: registry-username
+      password:
+        from_secret: registry-password
+
+---
+kind: pipeline
+type: kubernetes
+name: Deploy
+
+steps:
+  - name: customize-kube-files
+    image: supporttools/kube-builder
+    pull: true
+    environment:
+      APPENV: ${DRONE_COMMIT_BRANCH}
+    commands:
+      - bash ./deploy.sh
+
+  - name: deploy-npd
+    image: cube8021/drone-kubectl
+    settings:
+      kubernetes_server:
+        from_secret: a1-k3s-prd_server
+      kubernetes_token:
+        from_secret: a1-k3s-prd_token
+    commands:
+      - kubectl create ns nagios-${DRONE_BUILD_NUMBER}
+      - kubectl label ns nagios-${DRONE_BUILD_NUMBER} team=supporttools
+      - kubectl label ns nagios-${DRONE_BUILD_NUMBER} app=nagios
+      - kubectl label ns nagios-${DRONE_BUILD_NUMBER} ns-purge=true
+      - kubectl annotate ns nagios-${DRONE_BUILD_NUMBER} field.cattle.io/projectId=c-nshm8:p-j4xxn
+      - kubectl apply -n nagios-${DRONE_BUILD_NUMBER} -f ./deployment-ready/
+
+  - name: deploy-prd
+    image: cube8021/drone-kubectl
+    settings:
+      kubernetes_server:
+        from_secret: b1-k3s-prd_server
+      kubernetes_token:
+        from_secret: b1-k3s-prd_token
+    commands:
+      - kubectl create ns nagios-${DRONE_BUILD_NUMBER}
+      - kubectl label ns nagios-${DRONE_BUILD_NUMBER} team=supporttools
+      - kubectl label ns nagios-${DRONE_BUILD_NUMBER} app=nagios
+      - kubectl label ns nagios-${DRONE_BUILD_NUMBER} ns-purge=true
+      - kubectl annotate ns nagios-${DRONE_BUILD_NUMBER} field.cattle.io/projectId=c-jrfsw:p-sf8zq
+      - kubectl apply -n nagios-${DRONE_BUILD_NUMBER} -f ./deployment-ready/
+
+depends_on:
+  - Build-nagiosserver
+  - Build-dellpowerconnect
+  - Build-linuxserver
